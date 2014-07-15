@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="A:\AndroidStudioWorkspace\BluetoothEcg_PR2_Ver2\app\build\intermediates\pre-dexed\debug\androidplot-core-0.6.0-7da7061dc21d15225e7d499dcbb2989855d7fc3c.jar"
+        jar="A:\AndroidStudioWorkspace\BluetoothEcg_PR2_Ver2\app\libs\androidplot-core-0.6.0.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="f748797c749973ce1364ea8cc640744b64f78709"/>
+
+</pre-dex-items>
