@@ -16,7 +16,6 @@
 
 package com.example.android.ECG_PIC;
 
-import java.util.Set;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -35,7 +34,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.example.android.ECG1.R;
+
+import java.util.Set;
 
 /**
  * This Activity appears as a dialog. It lists any paired devices and
@@ -46,22 +48,30 @@ import com.example.android.ECG1.R;
 public class DeviceListActivity extends Activity {
     // Debugging
     private static final String TAG = "DeviceListActivity";
+    // Flag for debugging
     private static final boolean D = true;
 
     // Return Intent extra
     public static String EXTRA_DEVICE_ADDRESS = "device_address";
 
-    // Member fields
+    /* Bluetooth adapter */
     private BluetoothAdapter mBtAdapter;
+    /* Datastructure maintaining the list of paired devices */
     private ArrayAdapter<String> mPairedDevicesArrayAdapter;
+    /* Datastructure maintaining the list of new found devices*/
     private ArrayAdapter<String> mNewDevicesArrayAdapter;
 
+    /*
+     * Method called when activity is created
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Setup the window
+        // This feature is used to show the progress widget in the action bar
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        // Setting the layout
         setContentView(R.layout.device_list);
 
         // Set result CANCELED in case the user backs out
@@ -127,7 +137,7 @@ public class DeviceListActivity extends Activity {
             mBtAdapter.cancelDiscovery();
         }
 
-        // Unregister broadcast listeners
+        // Unregister broadcast receivers
         this.unregisterReceiver(mReceiver);
     }
 

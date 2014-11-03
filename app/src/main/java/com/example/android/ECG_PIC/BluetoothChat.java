@@ -56,7 +56,7 @@ import java.util.Date;
 import java.util.LinkedList;
 
 /**
- * This is the main Activity that displays the current chat session.
+ * The actual activity where the plotting takes place
  */
 public class BluetoothChat extends Activity {
     // Debugging
@@ -79,9 +79,7 @@ public class BluetoothChat extends Activity {
     private static final int REQUEST_CONNECT_DEVICE_INSECURE = 2;
     private static final int REQUEST_ENABLE_BT = 3;
 
-    // Layout Views
 
-    
     // declare for save and email
     static String saveAdd;
     
@@ -121,8 +119,6 @@ public class BluetoothChat extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(D) Log.e(TAG, "+++ ON CREATE +++");
-
         // Set up the window layout
         setContentView(R.layout.main);
 
@@ -135,35 +131,11 @@ public class BluetoothChat extends Activity {
             finish();
             return;
         }
-        
-     // check ---------------------- //
-     		/*colorbmpSeries = new LineAndPointFormatter(Color.rgb(0, 0, 200), null, null, null);
-     		Paint lineFill = new Paint();
-             lineFill.setAlpha(400);*/
-            /// lineFill.setShader(new LinearGradient(0, 0, 0, 250, Color.WHITE, Color.BLUE, Shader.TileMode.MIRROR));
-             /*colorbmpSeries.setFillPaint(lineFill);*/
-           
+
+            // Drawing the Graph.
      		// can be used to add shades inside the plot
      		// -------------------------------------- // 
      		mySimpleXYPlot = (XYPlot) findViewById(R.id.mySimpleXYPlot);
-             /*mySimpleXYPlot.setPlotMargins(0, 0, 0, 0);
-             mySimpleXYPlot.setPlotPadding(0, 0, 0, 0);
-             mySimpleXYPlot.setRangeBoundaries(-128, 128, BoundaryMode.FIXED);
-             mySimpleXYPlot.setDomainBoundaries(0, HISTORY_SIZE, BoundaryMode.FIXED);
-             mySimpleXYPlot.setDomainStepMode(XYStepMode.INCREMENT_BY_VAL);
-             mySimpleXYPlot.setDomainStepValue(1);
-             mySimpleXYPlot.setBorderStyle(BorderStyle.SQUARE, null, null);
-             mySimpleXYPlot.getGraphWidget().getDomainLabelPaint().setColor(Color.TRANSPARENT);
-             mySimpleXYPlot.getGraphWidget().getBackgroundPaint().setColor(Color.BLACK);
-     		mySimpleXYPlot.getGraphWidget().getGridBackgroundPaint().setColor(Color.BLACK);
-     		mySimpleXYPlot.getGraphWidget().getRangeGridLinePaint().setColor(Color.TRANSPARENT);
-     		mySimpleXYPlot.getGraphWidget().getDomainGridLinePaint().setColor(Color.TRANSPARENT);
-             LineAndPointFormatter series1Format = new LineAndPointFormatter();
-          		series1Format.setPointLabelFormatter(new PointLabelFormatter());
-                  series1Format.configure(getApplicationContext(), R.xml.line_point_formatter_with_plf1);
-             mySimpleXYPlot.addSeries(sensorHistorySeries, series1Format);
-             mySimpleXYPlot.setTicksPerRangeLabel(1);
-             mySimpleXYPlot.setTicksPerDomainLabel(1);*/
             mySimpleXYPlot.getGraphWidget().getDomainLabelPaint().setColor(Color.TRANSPARENT);
             mySimpleXYPlot.getGraphWidget().getBackgroundPaint().setColor(Color.BLACK);
     		mySimpleXYPlot.getGraphWidget().getGridBackgroundPaint().setColor(Color.BLACK);
@@ -203,6 +175,8 @@ public class BluetoothChat extends Activity {
              //----------------------------------End-------------------------//
     }
 
+    /* After new screen(Activity) is launched bluetooth connection needs to be reInitialized
+     * So this is being done here */
     @Override
     public void onStart() {
         super.onStart();
@@ -375,6 +349,8 @@ public class BluetoothChat extends Activity {
         }
     };
 
+    /* Method is called as a callback mechanism, it is called after the bluetooth connection is
+     * successful or unsuccessful and control returns back to the activity */
     @Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(D) Log.d(TAG, "onActivityResult " + resultCode);
@@ -405,6 +381,7 @@ public class BluetoothChat extends Activity {
         }
     }
 
+    /* Method which makes actual connection */
     private void connectDevice(Intent data, boolean secure) {
         // Get the device MAC address 20:13:07:18:34:67 ::ME
         String address = data.getExtras()
@@ -416,22 +393,6 @@ public class BluetoothChat extends Activity {
     }
  // Convert Byte Arrary to Hex String
    
-    
-
-/*    public static class BytesTrans {
-    	public static String bytes2String(byte[] b, int count) {
-    		String []ret=new String[count];
-    		for (int i = 0; i < count; i++) {
-    			String ret[i] = Integer.toString(b[i] & 0xFF);
-    			mtextview1.append(ret[i] +" ");
-    }}}*/
-/*    public static String bytesToHex(byte[] in) {
-        final StringBuilder builder = new StringBuilder();
-        for(byte b : in) {
-            builder.append(String.format("%02x", b));
-        }
-        return builder.toString();
-    }*/
     public static String bytes2String(byte[] b, int count) {
         String ret =  "";
         //String str ="";
@@ -441,6 +402,7 @@ public class BluetoothChat extends Activity {
         return myInt;
     }
 
+    /* Method responsible for creating actionbar menu (Buttons in actionbar)*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -448,6 +410,7 @@ public class BluetoothChat extends Activity {
         return true;
     }
 
+    /* Method handles touch events of buttons present in the action bar */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent serverIntent = null;
@@ -469,13 +432,16 @@ public class BluetoothChat extends Activity {
         }
         return false;
     }
-    
+
+    /* Method copies the root layout and converts it into Bitmap
+     * Thus acting as a pseudo screenshot */
     public Bitmap takeScreenshot() {
   	   View rootView = findViewById(android.R.id.content).getRootView();
   	   rootView.setDrawingCacheEnabled(true);
   	   return rootView.getDrawingCache();
   	}
-    
+
+    /* Saving bitmap to SD Card */
 	 public void saveBitmap(Bitmap bitmap) {
  		 
 	 		// date format for filename
@@ -513,7 +479,8 @@ public class BluetoothChat extends Activity {
 				sendEmail("file:///sdcard/ECGimages/"+saveAdd);
 
 	 	}
-	 	 
+
+        /* Calling Implicit intent to send email */
 	 	 private void sendEmail(String imagePath){
 	  	    
 	  	    Intent emailIntent = new Intent(Intent.ACTION_SEND); 
